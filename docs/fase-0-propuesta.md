@@ -4,6 +4,8 @@
 > Todas las especificaciones de componentes marcadas con *(verificar)* deben confirmarse en el datasheet del fabricante antes de la Fase 4.
 > Fecha: 2026-10-26
 
+> **Actualización:** las secciones 3 (matriz de hardware) y 4 (arquitectura) están **sustituidas** por `fase-1-integracion-kit.md` (D-04: Uno del kit + ESP32-CAM, L298N, NiMH) y `fase-3-arquitectura.md`. Los requisitos (sección 2) y los riesgos (sección 5) siguen vigentes.
+
 ## 0. Estado del directorio de trabajo
 
 | Elemento | Estado |
@@ -210,7 +212,7 @@ Probabilidad (P) e impacto (I): B = bajo, M = medio, A = alto.
 |---|---|---|---|---|
 | R-01 | Picos de corriente de motores provocan brown-out/reinicio del ESP32. | A | A | Rails separados, buck dimensionado, condensadores electrolíticos + cerámicos, cableado corto de motores, masa en estrella. |
 | R-02 | Pin ECHO de 5 V daña el GPIO del ESP32 (3,3 V). | M | A | Divisor de tensión o sensor de 3,3 V; verificar con multímetro antes de conectar. |
-| R-03 | El ultrasonido no detecta obstáculos blandos, inclinados o finos. | M | A | Definir obstáculos de prueba; sensor redundante (ToF); velocidad limitada. |
+| R-03 | El ultrasonido no detecta obstáculos blandos, inclinados o finos. **Confirmado por el datasheet: el objeto debe medir ≥ 0,5 m² y ser liso** (fase 2, H2). | A | A | Obstáculos de prueba grandes y lisos; documentarlo como limitación de la v1; sensor redundante en v1.1; velocidad limitada. |
 | R-04 | La ESP32-CAM es inestable (alimentación, SD, calor). | A | M | Alimentación 5 V dedicada con buen condensador; el control no depende de ella; timeout de captura. |
 | R-05 | Corrupción del archivo de registro en la microSD por corte de energía. | M | M | Escribir y hacer `flush` por evento; formato de líneas independiente (CSV); verificación al arrancar. |
 | R-06 | Mal uso de baterías Li-ion (sobrecarga, cortocircuito). | B | A | BMS, fusible, cargador específico, nunca cargar sin supervisión. |
@@ -219,6 +221,9 @@ Probabilidad (P) e impacto (I): B = bajo, M = medio, A = alto.
 | R-09 | Plazos del semestre insuficientes. | M | A | MVP pequeño; fases con entregables; lo opcional se marca como opcional. |
 | R-10 | Componentes falsificados o clones con especificaciones distintas. | M | M | Comprar en proveedores fiables; probar cada módulo por separado antes de integrar. |
 | R-11 | Simulación (Wokwi) no refleja el comportamiento real (ruido, corrientes). | A | B | Usar simulación solo para lógica; validar lo eléctrico en el banco. |
+| R-13 | Al retroceder durante la evasión no hay sensor trasero → posible choque. | M | B | Retroceso corto (~10 cm) y a velocidad baja. |
+| R-14 | El bootloader de algunos clones del Uno entra en un bucle de reinicios al usar el watchdog. | M | M | Probarlo en T0 con un programa de prueba; si falla, regrabar el bootloader Optiboot o no usar el watchdog. |
+| R-15 | Pulso del ECHO medido con error si llegan datos por SoftwareSerial a la vez (las interrupciones alargan el bucle de medida). | B | B | El error hace parecer el obstáculo **más cerca** (dirección segura); los mensajes llegan con el robot parado. |
 | R-12 | Falsos contactos de la protoboard con la vibración del vehículo → reinicios o lecturas erráticas. | A | M | Cables cortos y fijados; potencia fuera de la protoboard; pasar a placa perforada soldada si aparecen fallos intermitentes. |
 
 ---
@@ -265,7 +270,7 @@ Probabilidad (P) e impacto (I): B = bajo, M = medio, A = alto.
 | D-02 | 2026-10-26 | Sin PCB en v1: montaje en placa de pruebas (protoboard). | No es obligatoria. Los cables de potencia de los motores y la batería no pasarán por la protoboard (sus contactos no aguantan bien la corriente de los motores); irán con bornas o soldados. |
 | D-03 | 2026-10-26 | Hora por NTP (hay Wi-Fi); el RTC DS3231 pasa a ser opcional. | Hay Wi-Fi en el lugar de pruebas. Riesgo: si la red falla al arrancar no hay hora real → se registra el tiempo desde el arranque con un indicador "sin hora". |
 
-**Material disponible:** chasis, motores, multímetro. Sin osciloscopio → la latencia (RNF-01) se medirá con marcas de tiempo en el firmware.
+**Material disponible:** multímetro. El kit (chasis, motores, Uno, L298N, HC-SR04) **está en camino** (2026-10-26); hasta que llegue, todo se diseña en papel. Sin osciloscopio → la latencia (RNF-01) se medirá con marcas de tiempo en el firmware.
 
 ## Pendiente de aprobación / respuesta
 

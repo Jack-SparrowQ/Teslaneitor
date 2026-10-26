@@ -102,6 +102,8 @@ Todas las masas van unidas (batería, L298N, buck, Uno, ESP32-CAM).
 
 ## 5. Modificaciones eléctricas propuestas
 
+> **Corregido en la fase 2** (`fase-2-especificaciones.md`): E1 → el Uno se alimenta por VIN desde la batería (H3); E3 + E4 → un adaptador de nivel BSS138 para TX y RX (H1); E6 → divisor 100k/10k con referencia interna de 1,1 V (H4). El diagrama de la sección 4 está sustituido por el de `fase-3-arquitectura.md`.
+
 | # | Modificación | Motivo |
 |---|---|---|
 | E1 | Alimentar la ESP32-CAM con un **buck propio** desde la batería, no desde el 5 V del Uno ni del L298N. | Los reguladores del Uno y del L298N son lineales y pequeños. Ejemplo: con 7,2 V de entrada y ~0,3 A de pico, disipan (7,2 − 5) × 0,3 ≈ 0,7 W, y en el Uno la tensión además caería y reiniciaría la placa. [VERIFICAR el consumo de la ESP32-CAM] |
