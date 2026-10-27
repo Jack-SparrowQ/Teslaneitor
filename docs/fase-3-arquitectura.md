@@ -156,9 +156,11 @@ stateDiagram-v2
 
 ---
 
-## 7. Pendiente de aprobación
+## 7. Decisiones aprobadas (2026-10-26)
 
-1. El mapa de pines del Uno y de la ESP32-CAM (sección 2).
-2. El protocolo y el formato del registro (secciones 3 y 4).
-3. Si la cámara falla durante la marcha, el robot sigue sin fotos hasta 3 fallos seguidos y después pasa a FALLO.
-4. Los parámetros iniciales de la sección 5.
+| ID | Decisión |
+|---|---|
+| D-09 | Mapa de pines del Uno y de la ESP32-CAM (sección 2). |
+| D-10 | Protocolo UART y formato del registro (secciones 3 y 4). |
+| D-11 | Si la cámara falla en marcha, el robot sigue sin fotos y pasa a FALLO tras 3 fallos seguidos. |
+| D-12 | Parámetros iniciales: parada a 25 cm, vía libre a 50 cm, ciclo de 60 ms, batería baja < 6,6 V. |
